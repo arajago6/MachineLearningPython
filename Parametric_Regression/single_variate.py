@@ -85,3 +85,19 @@ if __name__ == "__main__":
 		attributes = []; outcomes = []
 		attributes, outcomes = readData(dataFiles, iterator, attributes, outcomes)
 		attList.append(attributes); otcmList.append(outcomes); 
+
+		# View data
+		drawPlot([attributes,outcomes],'Plot of '+dataFiles[iterator])
+		
+		# Fit linear model to data using own function
+		zMatrix, thetaValues,trainingErrors,testingErrors = crossValidate(attributes,outcomes,foldCount,1,ownFunction = True)
+		zMatArr = np.array(zMatrix); otcmArr = np.array(outcomes)
+		print("Linear Model - Own Function - 10 fold cross validation")
+		print("Theta Values")
+		print np.array(thetaValues).reshape(-1,2)
+		print("Training Error\t\tTesting Error")
+		for itr in range(foldCount):
+    			print "%f\t\t%f" %(trainingErrors[itr][0],testingErrors[itr][0])
+		print "Mean Errors: Training: %f --- Testing: %f\n\n" %(np.mean(trainingErrors),np.mean(testingErrors))
+		pltInput = [attributes,outcomes,attributes,estimate(solveLinearModel(zMatArr,otcmArr),zMatArr)]
+		drawPlot(pltInput,'Own Function - Linear Model for '+dataFiles[iterator])
