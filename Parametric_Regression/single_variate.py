@@ -21,3 +21,10 @@ def solveLinearModel(dataArr, outcomes):
     	bMatrix = [[sum(outcomes)], [sum(attArr*outcomes)]]
 	return np.linalg.solve(np.array(aMatrix),np.array(bMatrix))
 
+
+def solvePolyModel(dataArr,outcomes):
+    return np.linalg.solve((np.dot(dataArr.transpose(),dataArr)),
+                           (np.dot(dataArr.transpose(),outcomes)))	
+
+
+
