@@ -101,3 +101,17 @@ if __name__ == "__main__":
 		print "Mean Errors: Training: %f --- Testing: %f\n\n" %(np.mean(trainingErrors),np.mean(testingErrors))
 		pltInput = [attributes,outcomes,attributes,estimate(solveLinearModel(zMatArr,otcmArr),zMatArr)]
 		drawPlot(pltInput,'Own Function - Linear Model for '+dataFiles[iterator])
+
+		# Fit linear model to data using pre-built python function
+		zMatrix, thetaValues,trainingErrors,testingErrors = crossValidate(attributes,otcmList[0],foldCount,1,ownFunction = False)
+		zMatArr = np.array(zMatrix); otcmArr = np.array(outcomes)
+		print("Linear Model - Pre-built Python Function - 10 fold cross validation")
+		print("Theta Values")
+		print np.array(thetaValues)
+		print("Training Error\t\tTesting Error")
+		for itr in range(foldCount):
+    			print "%f\t\t%f" %(np.array(trainingErrors[itr]),np.array(testingErrors[itr]))
+		print "Mean Errors: Training: %f --- Testing: %f\n\n" %(np.mean(trainingErrors),np.mean(testingErrors))
+		lR = LinearRegression(); lR.fit(zMatArr,otcmArr);
+		pltInput = [attributes,outcomes,attributes,lR.predict(zMatArr)]
+		drawPlot(pltInput,'Pre-built Python Function - Linear Model for '+dataFiles[iterator])
