@@ -12,3 +12,12 @@ def getDataMatrix(attributes, degree):
 		for itr in range(1,degree+1):
 			zMatrix[:,itr] = np.array(attributes)**itr	
 	return zMatrix
+
+
+def solveLinearModel(dataArr, outcomes):
+	attArr = dataArr[:,1]
+	attSum = sum(attArr)
+	aMatrix = [[len(attArr),attSum], [attSum, sum(attArr**2)]]
+    	bMatrix = [[sum(outcomes)], [sum(attArr*outcomes)]]
+	return np.linalg.solve(np.array(aMatrix),np.array(bMatrix))
+
