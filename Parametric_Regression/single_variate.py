@@ -27,4 +27,14 @@ def solvePolyModel(dataArr,outcomes):
                            (np.dot(dataArr.transpose(),outcomes)))	
 
 
+def crossValidate(attributes, outcomes, foldCount, degree, ownFunction = True):
+	thetaValList = []
+    	trainingErrorList =[]
+    	testingErrorList = []
 
+	zMatrix = getDataMatrix(attributes,degree)
+	zMatrixFolds = getFolds(zMatrix,foldCount)
+	otcmFolds = getFolds(outcomes,foldCount)
+
+	testDataList = copy.copy(zMatrixFolds)
+	testOtcmList = copy.copy(otcmFolds)
