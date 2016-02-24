@@ -141,3 +141,16 @@ if __name__ == "__main__":
 		print "Mean Errors: Training: %f --- Testing: %f\n\n" %(np.mean(trainingErrors),np.mean(testingErrors))
 		pltInput = [attributes[:50],outcomes[:50],attributes[:50],estimate(solvePolyModel(zMatArr,otcmArr),zMatArr)]
 		drawPlot(pltInput,'Own Function - Degree 3 Polynomial Model for '+dataFiles[iterator])
+
+		# Fit degree 4 polynomial model to a different subset of data
+		zMatrix, thetaValues,trainingErrors,testingErrors = crossValidate(attributes[:50],otcmList[0][:50],foldCount,4,ownFunction = True)
+		zMatArr = np.array(zMatrix); otcmArr = np.array(otcmList[0][:50])
+		print("Degree 4 Polynomial Model - Own Function - 10 fold cross validation")
+		print("Theta Values")
+		print np.array(thetaValues)
+		print("Training Error\t\tTesting Error")
+		for itr in range(foldCount):
+    			print "%f\t\t%f" %(np.array(trainingErrors[itr]),np.array(testingErrors[itr]))
+		print "Mean Errors: Training: %f --- Testing: %f\n\n" %(np.mean(trainingErrors),np.mean(testingErrors))
+		pltInput = [attributes[:50],outcomes[:50],attributes[:50],estimate(solvePolyModel(zMatArr,otcmArr),zMatArr)]
+		drawPlot(pltInput,'Own Function - Degree 4 Polynomial Model for '+dataFiles[iterator])
