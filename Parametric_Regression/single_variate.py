@@ -74,3 +74,14 @@ def crossValidate(attributes, outcomes, foldCount, degree, ownFunction = True):
         	testingErrorList.append(testingError)
 	
 	return zMatrix, thetaValList, trainingErrorList, testingErrorList
+
+
+if __name__ == "__main__":
+
+	#dataFiles = ["svar-set1.dat", "svar-set2.dat", "svar-set3.dat", "svar-set4.dat"]
+	dataFiles = ["svar-set2.dat"]
+	attList = []; otcmList = []; foldCount = 10
+	for iterator in range(0,len(dataFiles)):
+		attributes = []; outcomes = []
+		attributes, outcomes = readData(dataFiles, iterator, attributes, outcomes)
+		attList.append(attributes); otcmList.append(outcomes); 
