@@ -32,3 +32,19 @@ def meanSqrError(estimated,actual):
 	#estmAvg = np.mean(actual); denom = (sum(actual)-estmAvg)**2
 	#return sum((estimated-actual)**2)/denom 
 	return sum([(yh-y)**2 for y, yh in zip(estimated,actual)])/len(estimated) 
+
+
+def readData(dataFiles,iterator, attributes, outcomes):
+	fileContent = open(dataFiles[iterator],'r')
+	for line in fileContent:
+		li=line.strip()
+		if not li.startswith("#"):
+			spltData = li.split()
+			lastElem = len(spltData)-1
+			if lastElem == 1:
+				attributes.append(float(spltData[0]))
+				outcomes.append(float(spltData[1]))
+			else:
+				attributes.append([float(spltData[i]) for i in range(lastElem)])
+				outcomes.append([float(spltData[lastElem])])
+	return attributes, outcomes
