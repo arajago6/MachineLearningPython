@@ -22,3 +22,13 @@ def getFolds(iptData, foldCount):
             otptData[i].append(iterator.next())
             elemCount -= 1
     return otptData
+
+
+def estimate(thetaVal,dataArr):
+	return np.dot(dataArr,thetaVal)
+
+
+def meanSqrError(estimated,actual):
+	#estmAvg = np.mean(actual); denom = (sum(actual)-estmAvg)**2
+	#return sum((estimated-actual)**2)/denom 
+	return sum([(yh-y)**2 for y, yh in zip(estimated,actual)])/len(estimated) 
