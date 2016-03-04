@@ -51,3 +51,14 @@ def crossValidate(zMatrix, outcomes, foldCount):
 	
 	return zMatrix, thetaValList, trainingErrorList, testingErrorList
 
+
+def gradDescent(zMatrix, otcm, guessedTheta, lRate, iterNum):
+    thetaVal = np.ones(len(zMatrix[0])); thetaVal.fill(guessedTheta)
+    for i in range(iterNum):
+        estd = estimate(thetaVal,zMatrix)
+        totThetaVal = np.zeros(len(zMatrix[0]))
+        for i in range(len(estd)):
+            totThetaVal = totThetaVal + ((estd[i] - otcm[i])*zMatrix[i])
+        thetaVal = thetaVal - lRate*totThetaVal
+    return thetaVal
+
