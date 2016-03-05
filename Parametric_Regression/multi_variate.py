@@ -62,3 +62,10 @@ def gradDescent(zMatrix, otcm, guessedTheta, lRate, iterNum):
         thetaVal = thetaVal - lRate*totThetaVal
     return thetaVal
 
+
+def iterSolution(zMatrix, otcm, guessedTheta, lRate, iterNum,ztMatrix):
+    return estimate(np.array(gradDescent(zMatrix, otcm, guessedTheta, lRate, iterNum)),ztMatrix)
+
+
+def explicitSolution(zMatrix, otcm,ztMatrix):
+    return estimate(solve(zMatrix,otcm),ztMatrix)
