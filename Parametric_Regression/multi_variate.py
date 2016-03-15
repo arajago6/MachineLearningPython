@@ -73,3 +73,8 @@ def explicitSolution(zMatrix, otcm,ztMatrix):
 
 def gaussianFit(ip,otcm,sigma):
     return np.linalg.solve(np.exp((-1/2)*(cdist(ip,ip,'sqeuclidean') /sigma**2)),otcm)
+
+
+def gaussianEstimate(alpha,x,xEx,sigma):
+    return np.dot(alpha.transpose(),np.exp((-1/2)*(cdist(x,xEx,'sqeuclidean')/sigma**2)))
+
