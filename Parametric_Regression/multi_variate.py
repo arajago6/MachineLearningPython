@@ -69,3 +69,7 @@ def iterSolution(zMatrix, otcm, guessedTheta, lRate, iterNum,ztMatrix):
 
 def explicitSolution(zMatrix, otcm,ztMatrix):
     return estimate(solve(zMatrix,otcm),ztMatrix)
+
+
+def gaussianFit(ip,otcm,sigma):
+    return np.linalg.solve(np.exp((-1/2)*(cdist(ip,ip,'sqeuclidean') /sigma**2)),otcm)
