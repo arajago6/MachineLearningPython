@@ -125,3 +125,7 @@ if __name__ == "__main__":
 	print iterSolution(trainDataMat, trainOtcm, 0.1, 0.00005, 500,testDataMat)[:25]
 	print "\nExplicit Solution:\n"
 	print explicitSolution(trainDataMat, trainOtcm,testDataMat)[:25]
+
+	# Solve dual regression problem using gaussian kernel function and calculate accuracy
+	print "\nGaussian Fit:\n"
+	alphaVal = gaussianFit(dataInHD[2],outcomes,0.111); print alphaVal[0:25]
