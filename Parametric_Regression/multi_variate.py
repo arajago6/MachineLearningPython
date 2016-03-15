@@ -129,3 +129,10 @@ if __name__ == "__main__":
 	# Solve dual regression problem using gaussian kernel function and calculate accuracy
 	print "\nGaussian Fit:\n"
 	alphaVal = gaussianFit(dataInHD[2],outcomes,0.111); print alphaVal[0:25]
+
+	print "\nGaussian Estimate:\n"
+	estdVal = gaussianEstimate(alphaVal,dataInHD[2],dataInHD[2],0.111); print estdVal[0:25]
+	for i in range(len(estdVal.transpose())):
+		cv = (estdVal.transpose()[i] - outcomes[i])**2
+    		zz = zz + cv
+	print "\nMean Error\n"; print zz/len(estdVal)
