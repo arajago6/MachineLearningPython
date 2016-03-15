@@ -120,3 +120,8 @@ if __name__ == "__main__":
 
 	trainDataMat,testDataMat = dataInHD[3][:1000], dataInHD[3][1000:]
 	trainOtcm,testOtcm = outcomes[:1000],outcomes[1000:]
+
+	print "\nIterative Solution:\n"
+	print iterSolution(trainDataMat, trainOtcm, 0.1, 0.00005, 500,testDataMat)[:25]
+	print "\nExplicit Solution:\n"
+	print explicitSolution(trainDataMat, trainOtcm,testDataMat)[:25]
