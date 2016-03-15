@@ -113,3 +113,10 @@ if __name__ == "__main__":
 			print "Training Error\t\tTesting Error"
 			for i in range(len(training_mse)):
 		    		print "%f\t\t%f" %(test_mse[i][0],training_mse[i][0])
+
+	# Solve regression problem using explicit and iteartive solution
+	print "\nGradient Descent:\n"
+	print gradDescent(dataInHD[3][:1000], outcomes[:1000], 0.1, 0.00005, 500)
+
+	trainDataMat,testDataMat = dataInHD[3][:1000], dataInHD[3][1000:]
+	trainOtcm,testOtcm = outcomes[:1000],outcomes[1000:]
