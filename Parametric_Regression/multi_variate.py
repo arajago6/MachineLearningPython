@@ -78,3 +78,13 @@ def gaussianFit(ip,otcm,sigma):
 def gaussianEstimate(alpha,x,xEx,sigma):
     return np.dot(alpha.transpose(),np.exp((-1/2)*(cdist(x,xEx,'sqeuclidean')/sigma**2)))
 
+
+if __name__ == "__main__":
+
+	#dataFiles = ["mvar-set1.dat", "mvar-set2.dat", "mvar-set3.dat", "mvar-set4.dat"]
+	dataFiles = ["mvar-set1.dat"]
+	attList = []; otcmList = []; zz = 0
+	dataInHD = {}; thetaDict = {}; estimateOnHD = {}; meanError = {}
+	for iterator in range(0,len(dataFiles)):
+		attributes = []; outcomes = []
+		attributes, outcomes = readData(dataFiles, iterator, attributes, outcomes)
