@@ -88,3 +88,28 @@ if __name__ == "__main__":
 	for iterator in range(0,len(dataFiles)):
 		attributes = []; outcomes = []
 		attributes, outcomes = readData(dataFiles, iterator, attributes, outcomes)
+
+		for i in range(2,7):
+
+			# Map data to higher dimensional space
+			dataInHD[i] = mapHD(attributes,i)
+			print "\nMapping data to higher dimemsions and analyzing it - Degree: %d\n" %i
+			print "Mapped data:"; print dataInHD[i]
+
+			# Perform linear regression and calculate error
+	    		thetaDict[i] = solve(dataInHD[i],np.array(outcomes))
+			print "\nTheta of mapped data:"; print thetaDict[i]
+			
+	    		estimateOnHD[i] = estimate(thetaDict[i], dataInHD[i])
+			print "\nPredicted & actual outcomes - Output limited to initial 10 values"; 
+	    		print "Predicted\n",estimateOnHD[i][:10]; print "Actual\n",outcomes[:10]  
+			
+			for est in estimateOnHD:  
+	    			meanError[est] = meanSqrError(estimateOnHD[est],outcomes)
+			print "\nMean Square Error for degree : %d is %f\n" %(i, meanError[i])
+
+			_, thetas,test_mse,training_mse = crossValidate(dataInHD[2],np.array(outcomes),10)
+			print "Linear Regression on mapped HD space - Degree: %d\n" %i
+			print "Training Error\t\tTesting Error"
+			for i in range(len(training_mse)):
+		    		print "%f\t\t%f" %(test_mse[i][0],training_mse[i][0])
