@@ -19,3 +19,8 @@ def getSpecificVar(attributes, outcomes, dsrdOutcome, colNum=0):
 # This function calculates the membership
 def memberFn(x,sMean,sVar,pClassProb):
 	return (-np.log(sVar)-((0.5)*((x-sMean)**2/sVar**2))+np.log(pClassProb))
+
+
+# This function based on the membership value, decides on the final outcome prediction
+def discrimFn(mem1, mem2, outcome):
+	return outcome[0] if mem1>mem2 else outcome[1]
