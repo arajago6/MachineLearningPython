@@ -32,3 +32,18 @@ def gda1D(x,sMean,sVar,otcmVal,pClassProb):
 	for i in range(len(x)):
 		otcmGuess.append(discrimFn(memberFn(x[i],sMean[0],sVar[0],pClassProb[0]),memberFn(x[i],sMean[1],sVar[1],pClassProb[1]),otcmVal))
 	return otcmGuess
+
+
+# This function, splits the input attributes and outcomes into specified folds, gets prediction and metrics for each step 
+# of training and testing using own function and inbuilt sklearn function, based on the ownFunction flag
+def crossValidate(attributes, outcomes, foldCount, ownFunction=True):
+    	presList =[]; recallList = []
+	accrList = []; fMeasList = []
+	testingEstimate = []
+	featLen = 1; otcmVal = list(set(outcomes))
+
+	attrFolds = getFolds(attributes,foldCount)
+	otcmFolds = getFolds(outcomes,foldCount)
+
+	testDataList = copy.copy(attrFolds)
+	testOtcmList = copy.copy(otcmFolds)
