@@ -47,3 +47,39 @@ def crossValidate(attributes, outcomes, foldCount, ownFunction=True):
 
 	testDataList = copy.copy(attrFolds)
 	testOtcmList = copy.copy(otcmFolds)
+
+	
+	for itr in range(foldCount):
+		trainDataList = []
+		trainOtcmList = []
+		for intitr in range (foldCount):
+			if intitr != itr:
+				trainDataList.append(attrFolds[intitr]) 
+				trainOtcmList.append(otcmFolds[intitr])
+
+		trainDataArr = 	np.array(trainDataList).reshape(-1,featLen)
+		trainOtcmArr =  np.array(trainOtcmList).reshape(-1)
+		testDataArr = np.array(testDataList[itr]).reshape(-1,featLen)
+		testOtcmArr = np.array(testOtcmList[itr]).reshape(-1)
+		
+		if ownFunction:
+			# Predicting outcomes using own gda1D function
+			muVal = [getSpecificMean(trainDataArr,trainOtcmArr,1),getSpecificMean(trainDataArr,trainOtcmArr,2)] 
+			varVal = [getSpecificVar(trainDataArr,trainOtcmArr,1),getSpecificVar(trainDataArr,trainOtcmArr,2)] 
+			pClassProb = [len([trainOtcmArr[i] for i in range(len(trainOtcmArr)) if trainOtcmArr[i]==1])/float(len(trainOtcmArr)),
+						len([trainOtcmArr[i] for i in range(len(trainOtcmArr)) if trainOtcmArr[i]==2])/float(len(trainOtcmArr))												]
+			testingEstimate = gda1D(testDataArr,muVal,varVal,otcmVal,pClassProb)
+		else:		
+			# Predicting outcomes using inbuilt predict function
+			clf = LinearDiscriminantAnalysis()
+			clf.fit(trainDataArr,trainOtcmArr)
+			trainingEstimate = clf.predict(trainDataArr) 
+			testingEstimate = clf.predict(testDataArr)
+
+		metric = getMetrics(testOtcmArr,testingEstimate,otcmVal)
+		accrList.append(metric[0])
+		presList.append(metric[1])
+		recallList.append(metric[2])
+		fMeasList.append(metric[3])
+		
+	return accrList, presList, recallList, fMeasList
