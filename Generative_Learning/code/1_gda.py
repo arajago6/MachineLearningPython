@@ -24,3 +24,11 @@ def memberFn(x,sMean,sVar,pClassProb):
 # This function based on the membership value, decides on the final outcome prediction
 def discrimFn(mem1, mem2, outcome):
 	return outcome[0] if mem1>mem2 else outcome[1]
+
+
+# This function returns a list of predictions for input records, using discrimFn
+def gda1D(x,sMean,sVar,otcmVal,pClassProb):
+	otcmGuess = []
+	for i in range(len(x)):
+		otcmGuess.append(discrimFn(memberFn(x[i],sMean[0],sVar[0],pClassProb[0]),memberFn(x[i],sMean[1],sVar[1],pClassProb[1]),otcmVal))
+	return otcmGuess
