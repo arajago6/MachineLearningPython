@@ -113,3 +113,20 @@ for itr in range(foldCount):
 	print "Fold %d: \tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" %(itr+1,accrValues[itr],presValues[itr],recallValues[itr],fMeasValues[itr])
 print "\nMean values:\tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" % (np.mean(accrValues),np.mean(presValues),np.mean(recallValues),np.mean(fMeasValues))
 print "Mean area under Precision-Recall curve: %f" %(np.mean(np.array(aucValues)[np.nonzero(aucValues)]))
+
+
+kc_outcomes = [1 if outcomes[i]=="Iris-setosa" else 2 if outcomes[i]=="Iris-versicolor" else 3 for i in range(len(outcomes))]
+
+print "\n** Gaussian Discriminant Analysis - nD - All classes - 10 fold cross validation - Own function **"
+accrValues, presValues, recallValues, fMeasValues, aucValues = crossValidate(attributes,kc_outcomes,foldCount)
+for itr in range(foldCount):
+	print "Fold %d: \tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" %(itr+1,accrValues[itr],presValues[itr],recallValues[itr],fMeasValues[itr])
+print "\nMean values:\tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" % (np.mean(accrValues),np.mean(presValues),np.mean(recallValues),np.mean(fMeasValues))
+
+
+print "\n** Gaussian Discriminant Analysis - nD - All classes - 10 fold cross validation - Inbuilt function **"
+accrValues, presValues, recallValues, fMeasValues, aucValues = crossValidate(attributes,kc_outcomes,foldCount,ownFunction=False)
+for itr in range(foldCount):
+	print "Fold %d: \tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" %(itr+1,accrValues[itr],presValues[itr],recallValues[itr],fMeasValues[itr])
+print "\nMean values:\tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f\n" % (np.mean(accrValues),np.mean(presValues),np.mean(recallValues),np.mean(fMeasValues))
+
