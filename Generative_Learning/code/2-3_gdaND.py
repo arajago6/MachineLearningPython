@@ -88,3 +88,28 @@ def crossValidate(attributes, outcomes, foldCount, ownFunction=True):
 		aucList.append(metric[4])
 		
 	return accrList, presList, recallList, fMeasList, aucList
+
+
+
+# The part below drives this script, program execution starts here 
+attributes, outcomes = readData("../data/iris_shuffled.data")
+foldCount = 10
+clsVal = list(set(outcomes))
+
+twoc_attributes = [attributes[i] for i in range(len(outcomes)) if outcomes[i]=="Iris-versicolor" or outcomes[i]=="Iris-virginica"]
+twoc_outcomes = [1 if outcomes[i]=="Iris-versicolor" else 2 for i in range(len(outcomes)) if outcomes[i]=="Iris-versicolor" or outcomes[i]=="Iris-virginica"]
+
+print "\n** Gaussian Discriminant Analysis - nD - 2 Class (Iris-versicolor, Iris-virginica) - 10 fold cross validation - Own function **"
+accrValues, presValues, recallValues, fMeasValues, aucValues = crossValidate(twoc_attributes,twoc_outcomes,foldCount)
+for itr in range(foldCount):
+	print "Fold %d: \tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" %(itr+1,accrValues[itr],presValues[itr],recallValues[itr],fMeasValues[itr])
+print "\nMean values:\tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" % (np.mean(accrValues),np.mean(presValues),np.mean(recallValues),np.mean(fMeasValues))
+print "Mean area under Precision-Recall curve: %f" %(np.mean(np.array(aucValues)[np.nonzero(aucValues)]))
+
+
+print "\n** Gaussian Discriminant Analysis - nD - 2 Class (Iris-versicolor, Iris-virginica) - 10 fold cross validation - Inbuilt function **"
+accrValues, presValues, recallValues, fMeasValues, aucValues = crossValidate(twoc_attributes,twoc_outcomes,foldCount,ownFunction=False)
+for itr in range(foldCount):
+	print "Fold %d: \tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" %(itr+1,accrValues[itr],presValues[itr],recallValues[itr],fMeasValues[itr])
+print "\nMean values:\tAccuracy: %f\tPrecision: %f\tRecall: %f\tF-Measure: %f" % (np.mean(accrValues),np.mean(presValues),np.mean(recallValues),np.mean(fMeasValues))
+print "Mean area under Precision-Recall curve: %f" %(np.mean(np.array(aucValues)[np.nonzero(aucValues)]))
