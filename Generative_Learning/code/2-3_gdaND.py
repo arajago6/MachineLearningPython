@@ -65,3 +65,26 @@ def crossValidate(attributes, outcomes, foldCount, ownFunction=True):
 		trainOtcmArr =  np.array(trainOtcmList).reshape(-1)
 		testDataArr = np.array(testDataList[itr]).reshape(-1,featLen)
 		testOtcmArr = np.array(testOtcmList[itr]).reshape(-1)
+
+		if ownFunction:
+			params = getParams(trainDataArr,trainOtcmArr,otcmVal,featLen)
+			testingEstimate = gdaNDEstimate(testDataArr,params,otcmVal)
+		else:
+			#clf = LinearDiscriminantAnalysis()
+			clf = QuadraticDiscriminantAnalysis()
+			clf.fit(trainDataArr,trainOtcmArr)
+			trainingEstimate = clf.predict(trainDataArr) 
+			testingEstimate = clf.predict(testDataArr)
+
+		if itr == 0 and len(otcmVal)==2:			
+			addTitle = "Own" if ownFunction else "Inbuilt"
+			metric = getMetrics(testOtcmArr,testingEstimate,otcmVal,showPlot=True,title="GDA2D Versicolor,Virginica - %s"%addTitle)
+		else:
+			metric = getMetrics(testOtcmArr,testingEstimate,otcmVal)
+		accrList.append(metric[0])
+		presList.append(metric[1])
+		recallList.append(metric[2])
+		fMeasList.append(metric[3])
+		aucList.append(metric[4])
+		
+	return accrList, presList, recallList, fMeasList, aucList
