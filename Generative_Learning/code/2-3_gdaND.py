@@ -19,3 +19,17 @@ def getParams(trainDataArr,trainOtcmArr,otcmVal,featLen):
 		prior[each] = [len([trainOtcmArr[i] for i in range(len(trainOtcmArr)) if trainOtcmArr[i]==each])/float(len(trainOtcmArr))]
 		sig[each] = np.array(np.cov([trainDataArr[i] for i in range(len(trainOtcmArr)) if trainOtcmArr[i]==each],rowvar=0))
 	return dict({"muVal":muVal,"prior":prior,"sig":sig})
+
+
+# This function returns the list of predictions for the input data
+def gdaNDEstimate(testDataArr,params,otcmVal):
+	memValue = {}
+	testingEstimate=[]
+	for i in range(len(testDataArr)):
+		for each in otcmVal:
+			mean = np.array(params["muVal"][each])
+			prior = np.array(params["prior"][each])
+			sig = np.array(params["sig"][each])
+			memValue[each] = gdaNDMemberFn(testDataArr[i].reshape(4,-1),mean.reshape(4,-1),sig,prior)
+		testingEstimate.append(max(memValue.iteritems(), key=operator.itemgetter(1))[0])
+	return testingEstimate
