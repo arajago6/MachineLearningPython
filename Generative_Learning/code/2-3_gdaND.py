@@ -33,3 +33,35 @@ def gdaNDEstimate(testDataArr,params,otcmVal):
 			memValue[each] = gdaNDMemberFn(testDataArr[i].reshape(4,-1),mean.reshape(4,-1),sig,prior)
 		testingEstimate.append(max(memValue.iteritems(), key=operator.itemgetter(1))[0])
 	return testingEstimate
+	
+
+# This function, splits the input attributes and outcomes into specified folds, gets prediction and metrics for each step 
+# of training and testing using own function and inbuilt sklearn function, based on the ownFunction flag
+def crossValidate(attributes, outcomes, foldCount, ownFunction=True):
+    	presList =[]; recallList = []
+	accrList = []; fMeasList = []
+	aucList = []
+	testingEstimate = []
+
+	otcmVal = list(set(outcomes))
+	params = {}; featLen = 4; 
+
+	attrFolds = getFolds(attributes,foldCount)
+	otcmFolds = getFolds(outcomes,foldCount)
+
+	testDataList = copy.copy(attrFolds)
+	testOtcmList = copy.copy(otcmFolds)
+
+	
+	for itr in range(foldCount):
+		trainDataList = []
+		trainOtcmList = []
+		for intitr in range (foldCount):
+			if intitr != itr:
+				trainDataList.append(attrFolds[intitr]) 
+				trainOtcmList.append(otcmFolds[intitr])
+
+		trainDataArr = 	np.array(trainDataList).reshape(-1,featLen)
+		trainOtcmArr =  np.array(trainOtcmList).reshape(-1)
+		testDataArr = np.array(testDataList[itr]).reshape(-1,featLen)
+		testOtcmArr = np.array(testOtcmList[itr]).reshape(-1)
