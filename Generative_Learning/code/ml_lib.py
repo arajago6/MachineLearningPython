@@ -52,4 +52,30 @@ def readData(dataFiles, split=",", nB=False):
 				else:
 					attributes.append([float(spltData[i]) for i in range(lastElem)])
 					outcomes.append(spltData[lastElem])
-	return attributes, outcomes
+	return attributes, outcomes	
+
+
+def getMetrics(testOtcmArr,testingEstimate,otcmVal,showPlot=False,title=None):
+	tPos = 0; tNeg = 0; fPos = 0; fNeg = 0
+	finOtcmEstmate=[]; outcomes=[]
+
+	# Calculate confusion matrix elements, then calculate metrics
+	for fitr in range(len(testOtcmArr)):			
+		tEst = testingEstimate[fitr]
+		if  tEst == testOtcmArr[fitr]:
+			if tEst == otcmVal[0]:
+				tPos += 1 
+			else:
+				tNeg += 1
+		else:
+			if tEst == otcmVal[0]:
+				fPos += 1 
+			else:
+				fNeg += 1
+	accrVal = float(tPos+tNeg)/(tPos+tNeg+fNeg+fPos)
+	presVal = float(tPos)/(tPos+fPos) if tPos+fPos != 0 else 0.0
+	recallVal = float(tPos)/(tPos+fNeg) if tPos+fNeg != 0 else 0.0
+	fMeasVal = 2*float(presVal*recallVal)/(presVal+recallVal) if presVal+recallVal != 0 else 0.0
+	
+	print accrVal, presVal, recallVal, fMeasVal
+	
