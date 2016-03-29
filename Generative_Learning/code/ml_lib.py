@@ -29,3 +29,27 @@ def getFolds(iptData, foldCount):
             otptData[i].append(iterator.next())
             elemCount -= 1
     return otptData
+
+
+# This function is to read the input file and get list of attributes and outcomes from it
+def readData(dataFiles, split=",", nB=False):
+	attributes = []; outcomes = []
+	fileContent = open(dataFiles,'r')
+	for line in fileContent:
+		li=line.strip()
+		# Ignore blank lines and comments, then split data
+		if li != "":
+			if not li.startswith("#"):
+				spltData = li.split(split)
+				lastElem = len(spltData)-1
+				if lastElem == 1:
+					if nB:
+						attributes.append(spltData[1].lower())
+						outcomes.append(spltData[0])
+					else:
+						attributes.append(float(spltData[0]))
+						outcomes.append(spltData[1])
+				else:
+					attributes.append([float(spltData[i]) for i in range(lastElem)])
+					outcomes.append(spltData[lastElem])
+	return attributes, outcomes
