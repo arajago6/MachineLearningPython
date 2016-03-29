@@ -13,3 +13,19 @@ def getSpecificMean(attributes, outcomes, dsrdOutcome, colNum=0):
 def getSpecificVar(attributes, outcomes, dsrdOutcome, colNum=0):
 	dsrdOList = ([attributes[i] for i in range(len(outcomes)) if outcomes[i]==dsrdOutcome])
 	return np.std(np.array(dsrdOList)[:,colNum])
+
+
+# This function gets folds of given count from the input list of data
+def getFolds(iptData, foldCount):
+    iptDataSize = len(iptData)
+    elemCount = iptDataSize % foldCount
+    otptData = []
+    iterator = iter(iptData)
+    for i in range(foldCount):
+        otptData.append([])
+        for j in range(iptDataSize / foldCount):
+            otptData[i].append(iterator.next())
+        if elemCount:
+            otptData[i].append(iterator.next())
+            elemCount -= 1
+    return otptData
