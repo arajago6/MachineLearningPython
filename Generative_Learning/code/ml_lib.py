@@ -77,5 +77,28 @@ def getMetrics(testOtcmArr,testingEstimate,otcmVal,showPlot=False,title=None):
 	recallVal = float(tPos)/(tPos+fNeg) if tPos+fNeg != 0 else 0.0
 	fMeasVal = 2*float(presVal*recallVal)/(presVal+recallVal) if presVal+recallVal != 0 else 0.0
 	
-	print accrVal, presVal, recallVal, fMeasVal
+	#accrVal = accuracy_score(testOtcmArr,testingEstimate)
+   	#presVal = precision_score(testOtcmArr,testingEstimate)
+    #recallVal = recall_score(testOtcmArr,testingEstimate)
+    #fMeasVal= f1_score(testOtcmArr,testingEstimate)
 	
+    for i in range(0,len(testOtcmArr)):
+        outcomes+=[1 if testOtcmArr[i] == otcmVal[0] else 0]
+        finOtcmEstmate+=[1 if testingEstimate[i] == otcmVal[0] else 0]
+	precision, recall, threshold = precision_recall_curve(outcomes,finOtcmEstmate)
+	areaUnderPrc = auc(precision, recall)
+
+	# If showPlot flag is set, display the precision-recall curve
+    if(showPlot):
+		pl.clf()
+		pl.plot(recall, precision, label='P-R curve for Fold 1')
+		pl.plot([0, 1], [0, 1], 'k--')
+
+		pl.xlim([0.0, 1.0]); pl.ylim([0.0, 1.0])
+		pl.xlabel('Recall'); pl.ylabel('Precision')
+
+		pl.title('%s - P-R curve for Fold 1' % title); pl.legend(loc="lower right")
+		pl.show()
+
+	return accrVal, presVal, recallVal, fMeasVal, areaUnderPrc
+
