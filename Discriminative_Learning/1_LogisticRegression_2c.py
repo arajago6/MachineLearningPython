@@ -23,3 +23,12 @@ def gradDescentFunction(attributes, outcomes, learningRate, iterCountMax, thresh
         params = updatedParams
         
     return params
+    
+    
+# Returns loglikelihood to form update equation and to check whether early stopping criterion has been met   
+def logLikelihoodFunction2c(params,attributes,outcomes):
+    llHood = []
+    for x in range(attributes.shape[0]):
+        otcmGuess = logisticFunction(params,attributes[x])
+        llHood.append(np.log(otcmGuess) if outcomes[x] == 1 else np.log(1-otcmGuess))
+    return sum(llHood)
