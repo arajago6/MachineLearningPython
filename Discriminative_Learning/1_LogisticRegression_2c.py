@@ -32,3 +32,9 @@ def logLikelihoodFunction2c(params,attributes,outcomes):
         otcmGuess = logisticFunction(params,attributes[x])
         llHood.append(np.log(otcmGuess) if outcomes[x] == 1 else np.log(1-otcmGuess))
     return sum(llHood)
+
+
+# Returns predictions with the input test data and parameters
+def getEstimate(attributes, params):
+    testingEstimate = [1 if logisticFunction(params,attributes[i]) > 0.5 else 0 for i in range(0,attributes.shape[0])]
+    return testingEstimate
