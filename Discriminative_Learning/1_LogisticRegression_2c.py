@@ -38,3 +38,9 @@ def logLikelihoodFunction2c(params,attributes,outcomes):
 def getEstimate(attributes, params):
     testingEstimate = [1 if logisticFunction(params,attributes[i]) > 0.5 else 0 for i in range(0,attributes.shape[0])]
     return testingEstimate
+
+
+# Calls for gradient descent function and returns final parameters
+def logisticRegressionFunction2c(attributes, outcomes, learningRate, iterCountMax, threshold):
+    params = gradDescentFunction(attributes, outcomes, learningRate, iterCountMax, threshold)
+    return params
