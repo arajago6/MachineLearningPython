@@ -44,3 +44,32 @@ def getEstimate(attributes, params):
 def logisticRegressionFunction2c(attributes, outcomes, learningRate, iterCountMax, threshold):
     params = gradDescentFunction(attributes, outcomes, learningRate, iterCountMax, threshold)
     return params
+    
+    
+# This function, splits the input attributes and outcomes into specified folds, gets prediction and metrics for each step 
+# of training and testing using own function and inbuilt sklearn function, based on the ownFunction flag
+def crossValidate(attributes, outcomes, foldCount, degree, learningRate, iterCountMax, threshold, ownFunction = True):
+    presList =[]; recallList = []
+    accrList = []; fMeasList = []
+    otcmVal = list(set(outcomes))
+    featLen = attributes.shape[1]
+
+    zMatrix = getDataMatrix(attributes,featLen,degree)
+    zMatrixFolds = getFolds(zMatrix,foldCount)
+    otcmFolds = getFolds(outcomes,foldCount)
+
+    testDataList = copy.copy(zMatrixFolds)
+    testOtcmList = copy.copy(otcmFolds)
+
+    for itr in range(foldCount):
+        trainDataList = []
+        trainOtcmList = []
+        for intitr in range (foldCount):
+            if intitr != itr:
+                trainDataList.append(zMatrixFolds[intitr]) 
+                trainOtcmList.append(otcmFolds[intitr])
+                
+        trainDataArr = 	np.array(trainDataList).reshape(-1,zMatrix.shape[1])
+        trainOtcmArr =  np.array(trainOtcmList).reshape(-1)
+        testDataArr = np.array(testDataList[itr])
+        testOtcmArr = np.array(testOtcmList[itr])
