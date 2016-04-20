@@ -44,3 +44,22 @@ def logLikelihoodFunctionKc(params,attributes,outcomes,otcmVal):
             intLlHood.append((1 if y == outcomes[x] else 0) * np.log(actVal[x,y]))
         llHood.append(sum(intLlHood))
     return sum(llHood)
+    
+    
+# Returns predictions with the input test data, class labels and parameters
+def getEstimate(attributes, params, otcmVal, testingEstimate):
+    for x in range(attributes.shape[0]):
+        prevEst, otcmMax = 0, 0
+        for y in range(len(otcmVal)):
+            currEst = np.dot(np.transpose(params[y]),attributes[x])
+            if(currEst > prevEst):
+                otcmMax = y
+            prevEst = currEst
+        testingEstimate.append(otcmVal[otcmMax])
+    return testingEstimate
+
+
+# Calls for gradient descent function and returns final parameters
+def logisticRegressionKc(attributes, outcomes, learningRate, iterCountMax, threshold):
+    params = gradDescent(attributes, outcomes, learningRate, iterCountMax, threshold)
+    return params
