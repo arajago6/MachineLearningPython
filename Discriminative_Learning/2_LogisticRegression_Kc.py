@@ -63,3 +63,37 @@ def getEstimate(attributes, params, otcmVal, testingEstimate):
 def logisticRegressionKc(attributes, outcomes, learningRate, iterCountMax, threshold):
     params = gradDescent(attributes, outcomes, learningRate, iterCountMax, threshold)
     return params
+    
+    
+# This function, splits the input attributes and outcomes into specified folds, gets prediction and metrics for each step 
+# of training and testing using own function and inbuilt sklearn function, based on the ownFunction flag
+def crossValidate(attributes, outcomes, foldCount, learningRate, iterCountMax, threshold, ownFunction = True):
+    thetaValList = []
+    trainingErrorList =[]
+    testingErrorList = []
+    presList =[]; recallList = []
+    accrList = []; fMeasList = []
+    otcmVal = list(set(outcomes))
+    featLen = attributes.shape[1]
+
+    zMatrix = getDataMatrix(attributes,featLen)
+    zMatrixFolds = getFolds(attributes,foldCount)
+    otcmFolds = getFolds(outcomes,foldCount)
+
+    testDataList = copy.copy(zMatrixFolds)
+    testOtcmList = copy.copy(otcmFolds)
+
+    for itr in range(foldCount):
+        trainDataList = []
+        trainOtcmList = []
+        testingEstimate = []
+        
+        for intitr in range (foldCount):
+            if intitr != itr:
+                trainDataList.append(zMatrixFolds[intitr]) 
+                trainOtcmList.append(otcmFolds[intitr])
+
+        trainDataArr = 	np.array(trainDataList).reshape(-1,featLen)
+        trainOtcmArr =  np.array(trainOtcmList).reshape(-1)
+        testDataArr = np.array(testDataList[itr])
+        testOtcmArr = np.array(testOtcmList[itr])
