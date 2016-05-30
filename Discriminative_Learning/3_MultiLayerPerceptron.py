@@ -23,3 +23,30 @@ def getEstimate(attributes,olParam,hlParam,otcmVal,huCount,testingEstimate):
                 prevEst = currEst[y]
         testingEstimate.append(otcmVal[otcmMax])
     return testingEstimate   
+    
+    
+# To get the final parameters by using iterative parameter update
+def gradient_descent(attributes, outcomes, otcmVal, huCount, iterCountMax, learningRate, threshold, olLearningRate, beta):
+    otcmValCount = len(otcmVal)
+    attRowCount, attColCount = attributes.shape
+        
+    hlOutput = np.empty([attRowCount,huCount])
+    currEst = np.empty([attRowCount,otcmValCount])    
+    olParam = np.random.rand(otcmValCount,huCount)/10
+    hlParam = np.random.rand(huCount,attColCount)/10
+    hlOutput = np.transpose(logisticFunction(np.transpose(hlParam),np.transpose(attributes)))
+    
+    for itr in range(attRowCount):
+        for intitr in range(otcmValCount):
+            currEst[itr,intitr] = softmaxFunction(olParam,hlOutput[itr],intitr,otcmVal)
+            
+    for mainitr in range(iterCountMax):
+        hlOutput = np.transpose(logisticFunction(np.transpose(hlParam),np.transpose(attributes)))
+        for itr in range(attRowCount):
+            for intitr in range(otcmValCount):
+                currEst[itr,intitr] = softmaxFunction(olParam,hlOutput[itr],intitr,otcmVal)
+
+        for intitr in range(otcmValCount):
+            paramCorrection = []
+            for itr in range(attRowCount):
+                paramCorrection.append((currEst[itr,intitr] - (1 if outcomes[itr]==intitr else 0)) * hlOutput[itr])
