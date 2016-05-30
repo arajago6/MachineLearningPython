@@ -50,3 +50,25 @@ def gradient_descent(attributes, outcomes, otcmVal, huCount, iterCountMax, learn
             paramCorrection = []
             for itr in range(attRowCount):
                 paramCorrection.append((currEst[itr,intitr] - (1 if outcomes[itr]==intitr else 0)) * hlOutput[itr])
+            
+            # Update output layer params with correction using momentum
+            if intitr >= 2:
+                olParam[intitr] -= learningRate * sum(paramCorrection) - beta*(olParam[intitr-1]-olParam[intitr-2])
+            else:
+				olParam[intitr] -= learningRate * sum(paramCorrection)
+			
+        for intitr in range(huCount):
+            paramCorrection = []
+            for itr in range(attRowCount):
+                paramCorrection1 = []
+                for yval in range(otcmValCount):
+                    paramCorrection1.append((currEst[itr,yval] - (1 if outcomes[itr]==yval else 0)) * olParam[yval,intitr])
+                paramCorrection.append(sum(paramCorrection1) * hlOutput[itr,intitr] * (1-hlOutput[itr,intitr]) * attributes[itr])
+            
+            # Update hidden layer params with correction using momentum
+            if intitr >= 2:
+                hlParam[intitr] -= learningRate * sum(paramCorrection) - beta*(hlParam[intitr-1]-hlParam[intitr-2])
+            else:
+				hlParam[intitr] -= learningRate * sum(paramCorrection)
+			
+    return olParam,hlParam
