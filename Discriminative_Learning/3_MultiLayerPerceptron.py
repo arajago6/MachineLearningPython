@@ -72,3 +72,14 @@ def gradient_descent(attributes, outcomes, otcmVal, huCount, iterCountMax, learn
 				hlParam[intitr] -= learningRate * sum(paramCorrection)
 			
     return olParam,hlParam
+
+
+# Returns loglikelihood to form update equation 
+def logLikelihoodFunctionMl(attributes,outcomes,otcmGuess,otcmVal):
+    llHood = []
+    for x in range(attributes.shape[0]):
+        intLlHood = []
+        for y in range(len(otcmVal)):
+            intLlHood.append((1 if k == outcomes[x] else 0) * np.log(otcmGuess[x,y]))
+        llHood.append(sum(intLlHood))
+    return -sum(llHood)
