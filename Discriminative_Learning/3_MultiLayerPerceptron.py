@@ -83,3 +83,29 @@ def logLikelihoodFunctionMl(attributes,outcomes,otcmGuess,otcmVal):
             intLlHood.append((1 if k == outcomes[x] else 0) * np.log(otcmGuess[x,y]))
         llHood.append(sum(intLlHood))
     return -sum(llHood)
+    
+    
+# Calls for gradient descent function and returns final parameters
+def multiLayerPerceptron(attributes, outcomes, iterCountMax, huCount, learningRate, olLearningRate, threshold, otcmVal, beta):
+    olParam,hlParam =  gradient_descent(attributes, outcomes, otcmVal,  huCount, iterCountMax, learningRate, threshold, olLearningRate, beta);
+    return olParam,hlParam
+
+
+# This function, splits the input attributes and outcomes into specified folds, gets prediction and metrics for each step 
+# of training and testing using own function and inbuilt sklearn function, based on the ownFunction flag
+def crossValidate(attributes, outcomes, foldCount, iterCountMax, huCount, learningRate, threshold, olLearningRate, beta, ownFunction = True):
+    
+    thetaValList = []
+    trainingErrorList =[]
+    testingErrorList = []
+    presList =[]; recallList = []
+    accrList = []; fMeasList = []
+    otcmVal = list(set(outcomes))
+    featLen = attributes.shape[1]
+
+    zMatrix = getDataMatrix(attributes,featLen)
+    zMatrixFolds = getFolds(attributes,foldCount)
+    otcmFolds = getFolds(outcomes,foldCount)
+
+    testDataList = copy.copy(zMatrixFolds)
+    testOtcmList = copy.copy(otcmFolds)
